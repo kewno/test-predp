@@ -4,15 +4,13 @@ import SelectElem from "../../ui/SelectElem/SelectElem";
 import './brigades-select.sass';
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../redux/store";
-import {
-    actions
-} from "../../../redux/brigadesReducer";
+import {actions} from "../../../redux/brigadesReducer";
+
+
 type AttrType = {
     headlineCompound?: string
     headlineDepartment?: string
 }
-
-
 
 const BrigadesSelect: React.FC<AttrType> = ({headlineCompound, headlineDepartment}) => {
 

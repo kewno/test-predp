@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { Card} from 'antd'
 import './card-elem.sass'
+import {CheckCircleOutlined, StopOutlined} from "@ant-design/icons";
 
 type AttrType = {
     title?: string
@@ -18,9 +19,11 @@ const CardElem: React.FC<AttrType> = ({title,headline, compound, cluster, field,
             <Card size="small" title={title}>
                 <h3 className="card-elem__headline">{headline}</h3>
                 {compound === 1 ?
-                    <p className={`card-elem__text card-elem__text--connect`}><b>Соединение:</b> {'В норме'}</p>
+                    // eslint-disable-next-line react/jsx-no-undef
+                    <p className={`card-elem__text card-elem__text--connect`}><b>Соединение:</b> {'В норме'} <CheckCircleOutlined /></p>
                     :
-                    <p className={`card-elem__text card-elem__text--no-connect`}><b>Соединение:</b> {'Нет связи'}</p>
+                    // eslint-disable-next-line react/jsx-no-undef
+                    <p className={`card-elem__text card-elem__text--no-connect`}><b>Соединение:</b> {'Нет связи'} <StopOutlined /></p>
                 }
 
                 <p className="card-elem__text"><b>Кластер:</b> {cluster}</p>

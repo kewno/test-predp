@@ -4,27 +4,18 @@ import CardElem from "../../ui/CardElem/CardElem";
 import './brigades-tiles.sass';
 import {BrigadesProcessed} from "../../../types/types";
 import {useEffect} from "react";
-import {
-    actions,
-    getNameDepartment,
-    setDataBrigadesThunkCreator,
-    setDataConnectionThunkCreator,
-    setDataDepartmentsThunkCreator
-} from "../../../redux/brigadesReducer";
+import {actions, getNameDepartment} from "../../../redux/brigadesReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../redux/store";
 
-type AttrType = {
-    tiles?: BrigadesProcessed[]
-}
 
-const BrigadesTiles: React.FC<AttrType> = ({tiles}) => {
-    let departments = useSelector((state: AppStateType) => state.brigades.departments)
+const BrigadesTiles = () => {
+
     let selected = useSelector((state: AppStateType) => state.brigades.activeSelect)
-
     let brigades = useSelector((state: AppStateType) => state.brigades.brigadesLayout)
 
     let dispatch = useDispatch()
+
     useEffect(() => {
         dispatch(actions.filterBrigades())
     }, [selected]);

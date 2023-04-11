@@ -1,4 +1,3 @@
-//import {mainAPI} from "../api/api";
 import {Dispatch} from "redux";
 import {ThunkAction} from "redux-thunk";
 import {AppStateType, InferActionsTypes} from "./store";
@@ -25,9 +24,6 @@ export const actions = {
 type ActionsTypes = InferActionsTypes<typeof actions>
 export type DispatchType = Dispatch<ActionsTypes>
 
-
-//export type initBrigadesType = typeof initBrigades
-
 export type initBrigadesType = {
     brigades: BrigadesProcessed[]
     departments: DepartmentsProcessed[]
@@ -53,8 +49,8 @@ let initBrigades: initBrigadesType = {
 export const setDataBrigadesThunkCreator = () : ThunkAction<Promise<void>, AppStateType, unknown, ActionsTypes> => {
     return async (dispatch: DispatchType) => {
         let response = await brigadesAPI.getBrigades()
-        dispatch(actions.setBrigades(response))
         dispatch(actions.toggleFetchPreloader())
+        dispatch(actions.setBrigades(response))
     }
 }
 
@@ -106,9 +102,10 @@ const filterBrigades = (brigades: BrigadesProcessed[], select: ActiveSelect): Br
 
 let brigadesReducer = (state = initBrigades, action: ActionsTypes) => {
     let stateClone = {...state}
+
     if (action.type === 'SET_BRIGADES') {
-        stateClone.brigades = [...stateClone.brigades]
-        stateClone.brigadesLayout = [...stateClone.brigadesLayout]
+        stateClone.brigades = [...stateClone.brigades] // all brigades
+        stateClone.brigadesLayout = [...stateClone.brigadesLayout] // brigades for view
         let brigadesArr: BrigadesProcessed[] = []
 
         action.brigades.map(el => {
@@ -122,6 +119,7 @@ let brigadesReducer = (state = initBrigades, action: ActionsTypes) => {
         })
         stateClone.brigades = brigadesArr
         stateClone.brigadesLayout = brigadesArr
+
     } else if (action.type === 'SET_CONNECTION') {
         stateClone.connection = [...stateClone.connection]
         let connectionArr: DepartmentsProcessed[] = []
@@ -129,6 +127,7 @@ let brigadesReducer = (state = initBrigades, action: ActionsTypes) => {
             connectionArr.push({label: el.name, value: el.connectionStateId.toString()})
         })
         stateClone.connection = connectionArr
+
     } else if (action.type === 'SET_DEPARTMENTS') {
         stateClone.departments = [...stateClone.departments]
         let departmentsArr: DepartmentsProcessed[] = []
@@ -136,11 +135,13 @@ let brigadesReducer = (state = initBrigades, action: ActionsTypes) => {
             departmentsArr.push({label: el.name, value: el.id.toString()})
         })
         stateClone.departments = departmentsArr
+
     } else if (action.type === 'TOGGLE_FETCH_PRELOADER') {
         stateClone.isFetchPreloader = !stateClone.isFetchPreloader
+
     } else if (action.type === 'SET_ACTIVE_SELECT') {
         stateClone.activeSelect = {...stateClone.activeSelect}
-        if (action.selectItem.value === undefined) {
+        if (action.selectItem.value === undefined) { // for delete active select
             // @ts-ignore
             stateClone.activeSelect[`${action.selectItem.label}`] = ''
         } else {
@@ -148,15 +149,9 @@ let brigadesReducer = (state = initBrigades, action: ActionsTypes) => {
             stateClone.activeSelect[`${action.selectItem.label}`] = action.selectItem.value
         }
 
-        //stateClone.brigadesLayout = [...stateClone.brigadesLayout]
-        //stateClone.brigadesLayout = filterBrigades(stateClone.brigades)
     } else if (action.type === 'FILTER_BRIGADES') {
-        //stateClone.brigadesLayout = [...stateClone.brigadesLayout]
         stateClone.brigadesLayout = stateClone.brigades
         stateClone.brigadesLayout = filterBrigades(stateClone.brigadesLayout, stateClone.activeSelect)
-        //stateClone.brigadesLayout = filterBrigades()
-        //console.log(stateClone.activeSelect)
-        //stateClone
     }
     return stateClone
 }

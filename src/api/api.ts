@@ -1,4 +1,4 @@
-import axios, {AxiosResponse} from "axios";
+import axios from "axios";
 import {DataBrigades, DataConnection, DataDepartments} from "../types/types";
 
 const instanse = axios.create({
