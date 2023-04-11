@@ -4,7 +4,7 @@ import brigadesReducer from "./brigadesReducer";
 
 
 let reducer = combineReducers({
-    main : brigadesReducer
+    brigades : brigadesReducer
 },)
 
 type ReducerType = typeof reducer

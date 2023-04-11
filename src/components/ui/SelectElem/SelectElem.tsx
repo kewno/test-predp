@@ -5,7 +5,7 @@ import './select-elem.sass';
 type AttrType = {
     options: Options[],
     headline?: string
-    handleChange: () => void,
+    handleChange: (value: string) => void,
     disabled?: boolean, // for select
     allowClear?: boolean
 }

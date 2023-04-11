@@ -2,18 +2,47 @@ import * as React from 'react';
 import {Row, Col} from 'antd';
 import CardElem from "../../ui/CardElem/CardElem";
 import './brigades-tiles.sass';
+import {BrigadesProcessed} from "../../../types/types";
+import {useEffect} from "react";
+import {
+    actions,
+    getNameDepartment,
+    setDataBrigadesThunkCreator,
+    setDataConnectionThunkCreator,
+    setDataDepartmentsThunkCreator
+} from "../../../redux/brigadesReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {AppStateType} from "../../../redux/store";
 
 type AttrType = {
-    tiles: any[]
+    tiles?: BrigadesProcessed[]
 }
 
 const BrigadesTiles: React.FC<AttrType> = ({tiles}) => {
+    let departments = useSelector((state: AppStateType) => state.brigades.departments)
+    let selected = useSelector((state: AppStateType) => state.brigades.activeSelect)
+
+    let brigades = useSelector((state: AppStateType) => state.brigades.brigadesLayout)
+
+    let dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(actions.filterBrigades())
+    }, [selected]);
 
     return (
         <Row className="brigades-tiles" gutter={[16, 16]} >
-            {tiles.map((el: any )=> {
-                return <Col xxl={{ span: 4}} xl={{ span: 6}} md={{ span: 8}} sm={{ span: 12}} xs={{ span: 24}}>
-                    <CardElem headline={el.headline}/>
+            {brigades.map((el: BrigadesProcessed )=> {
+                let nameDepartment = getNameDepartment(el.department.toString())
+
+                return <Col key={el.id} xxl={{ span: 4}} xl={{ span: 6}} md={{ span: 8}} sm={{ span: 12}} xs={{ span: 24}}>
+                    <CardElem
+                        title={el.brigade_name}
+                        headline={nameDepartment}
+                        compound={el.connection}
+                        cluster={el.position.cluster}
+                        field={el.position.field}
+                        well={el.position.well}
+                    />
                 </Col>
             })}
         </Row>
